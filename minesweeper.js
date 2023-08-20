@@ -1,10 +1,13 @@
-const image = document.getElementById('hidden');
-const canvas = document.getElementById('myCanvas');
-const c = canvas.getContext('2d');
+const image = document.getElementById('hidden'); // A kép, amit megjelenítünk.
+const canvas = document.getElementById('myCanvas'); // A canvas, amire rajzolunk.
+const c = canvas.getContext('2d'); // A canvas context-je, amivel rajzolunk.
 
-const size = 50;
-let x = 100;
-let y = 50;
+const size = 50; // A képek mérete.
 
-c.drawImage(image, x, y, size, size); // Az első (kezdő) kép bal felső sarka (x,y) koordinátára kerül.
-c.drawImage(image, x + size, y + size, size, size); // A második kép a kezdő kép jobb alsó sarkára kerül.
+drawImage(0, 0); // Kirajzoljuk a képet a kezdő koordinátákon.
+drawImage(100, 100);
+drawImage(200, 200);
+
+function drawImage(x, y) {
+    c.drawImage(image, x, y, size, size);
+}
