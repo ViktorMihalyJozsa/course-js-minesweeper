@@ -6,6 +6,13 @@ const size = 50; // A képek mérete.
 const columns = canvas.width / size; // A képek száma.
 const rows = canvas.height / size; // A képek száma.
 
+let map = [
+    [9, 8, 0, 1, 1, 1, 0, 0],
+    [9, 9, 1, 1, 0, 0, 0, 0]
+]; // A pálya.
+
+console.log(map); // Kiírjuk a pályát a konzolra.
+
 drawMap(); // Kirajzoljuk a pályát.
 
 function drawMap() {
