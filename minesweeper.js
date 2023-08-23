@@ -23,7 +23,7 @@ const images = {
 let map = createMap(); // Létrehozzuk a pályát.
 placeMines(map, mineCount); // Elhelyezzük az aknákat.
 
-drawMap(); // Kirajzoljuk a pályát.
+whenAllImagesLoaded(drawMap); // Megvárjuk, amíg betöltődnek a képek, és csak utána rajzoljuk ki a pályát.
 
 function placeMines(map, mineCount) {
     let mines = 0; // Az elhelyezett aknák száma.
@@ -62,3 +62,29 @@ function drawMap() {
 function drawImage(image, x, y) {
     c.drawImage(image, x, y, size, size); // Kirajzoljuk a képet.
 }
+
+
+// Ez a függvény megvárja, amíg az összes kép betöltődik, és csak utána hívja meg a paraméterként kapott másik függvényt.
+// Az első paraméter a meghívandó függvény, a második paraméter a betöltési idő, ami 0-ról indul.
+
+function whenAllImagesLoaded(onAllImagesLoaded, loadTime = 0) {
+    const imageCount = Object.values(images).length; // az összes kép száma
+    let loadedImages = 0; // azoknak a képeknek a száma, amik már betöltődtek
+    for (let image of Object.values(images)) { // végigmegyünk az összes képen
+      if (image.complete) { // ha a kép betöltődött
+        loadedImages++; // növeljük a betöltött képek számát
+      }
+    }
+    // ha még nem töltődött be minden kép, és még nem telt el 3 másodperc
+    if (loadedImages < imageCount && loadTime < 3000) { 
+      console.log('Waiting for images to load'); // kiírjuk, hogy várunk a képekre
+      setTimeout(() => { // 100ms múlva újra meghívjuk ezt a függvényt (rekurzió)
+        whenAllImagesLoaded(onAllImagesLoaded, loadTime + 100); // a betöltési időt 100ms-al növeljük
+      }, 100);
+    }
+    if (loadTime >= 3000) { // ha már eltelt 3 másodperc
+      console.log('Images could not be loaded'); // kiírjuk, hogy nem sikerült betölteni a képeket
+    } else if (imageCount === loadedImages) { // különben ha minden kép betöltődött
+      onAllImagesLoaded(); // meghívjuk a paraméterként kapott függvényt
+    }
+  }
