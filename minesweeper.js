@@ -5,10 +5,11 @@ const c = canvas.getContext('2d'); // A canvas context-je, amivel rajzolunk.
 const size = 50; // A képek mérete.
 const columns = canvas.width / size; // A képek száma.
 const rows = canvas.height / size; // A képek száma.
+const mine = 'mine'; 
 
 let map = [
-    [9, 8, 0, 1, 1, 1, 0, 0],
-    [9, 9, 1, 1, 0, 0, 0, 0]
+    [9, 8, mine, 1, mine, 1, 0, 0],
+    [9, 9, 1, 1, mine, 0, 0, 0]
 ]; // A pálya.
 
 console.log(map); // Kiírjuk a pályát a konzolra.
