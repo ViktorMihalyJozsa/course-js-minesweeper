@@ -7,14 +7,25 @@ const columns = canvas.width / size; // A képek száma.
 const rows = canvas.height / size; // A képek száma.
 const mine = 'mine'; 
 
-let map = [
-    [9, 8, mine, 1, mine, 1, 0, 0],
-    [9, 9, 1, 1, mine, 0, 0, 0]
-]; // A pálya.
+let map = createMap(); // Létrehozzuk a pályát.
+map[0][0] = mine; // Elhelyezünk egy aknát a pályán.
 
-console.log(map); // Kiírjuk a pályát a konzolra.
+
+console.log(map); // Kiírjuk a konzolra a pályát.
 
 drawMap(); // Kirajzoljuk a pályát.
+
+function createMap() {
+    let map = []; // A pálya.
+    for (let j = 0; j < rows; j++) { // Végigmegyünk a sorokon.
+        let row = []; // Egy sor.
+        for (let i = 0; i < columns; i++) {
+            row [i] = 0;
+        }
+        map[j] = row;
+    }
+    return map;
+}
 
 function drawMap() {
     for (let i = 0; i < columns; i++) {
