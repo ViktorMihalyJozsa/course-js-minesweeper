@@ -6,14 +6,26 @@ const size = 50; // A képek mérete.
 const columns = canvas.width / size; // A képek száma.
 const rows = canvas.height / size; // A képek száma.
 const mine = 'mine'; 
+const mineCount = 20; // A pályán lévő aknák száma.
 
 let map = createMap(); // Létrehozzuk a pályát.
-map[0][0] = mine; // Elhelyezünk egy aknát a pályán.
-
+placeMines(map, mineCount); // Elhelyezzük az aknákat.
 
 console.log(map); // Kiírjuk a konzolra a pályát.
 
 drawMap(); // Kirajzoljuk a pályát.
+
+function placeMines(map, mineCount) {
+    let mines = 0; // Az elhelyezett aknák száma.
+    while (mines < mineCount) { // Amíg nem helyeztünk el elég aknát.
+        let x = Math.floor(Math.random() * columns); // Véletlenszerű oszlop.
+        let y = Math.floor(Math.random() * rows); // Véletlenszerű sor.
+        if (map[y][x] !== mine) { // Ha még nincs akna.
+            map[y][x] = mine; // Elhelyezzük az aknát.
+            mines++; // Növeljük az elhelyezett aknák számát.
+        }
+    }
+}
 
 function createMap() {
     let map = []; // A pálya.
