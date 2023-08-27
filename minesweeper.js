@@ -22,6 +22,7 @@ const images = {
 
 let map = createMap();
 placeMines(map, mineCount);
+calculateFiledValues(map);
 drawMap();
 
 function calculateFiledValues(map) {
