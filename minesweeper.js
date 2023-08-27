@@ -21,7 +21,10 @@ const images = {
 };
 
 let map = createMap();
-let exploredMap = [];
+let exploredMap = createExproledMap();
+exploredMap[0][0] = true;
+exploredMap[2][3] = true;
+exploredMap[2][4] = true;
 placeMines(map, mineCount);
 calculateFiledValues(map);
 whenAllImagesLoaded(drawMap);
@@ -90,12 +93,29 @@ function createMap() {
   return map;
 }
 
+function createExproledMap() {
+  let exploredMap = [];
+  for (let j = 0; j < rows; j++) {
+    let row = [];
+    for (let i = 0; i < columns; i++) {
+      row[i] = false;
+    }
+    exploredMap[j] = row;
+  }
+  return exploredMap;
+}
+
 function drawMap() {
   for (let rowI = 0; rowI < rows; rowI++) {
     for (let colI = 0; colI < columns; colI++) {
+      if (exploredMap[rowI][colI] === false) {
+        drawImage(images.hidden, colI * size, rowI * size);
+      } 
+      else {
       let field = map[rowI][colI];
       let image = images[field];
       drawImage(image, colI * size, rowI * size);
+      }
     }
   }
 }
