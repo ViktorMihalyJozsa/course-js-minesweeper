@@ -30,9 +30,23 @@ function calculateFiledValues(map) {
       let field = map[rowI][colI];
       if (field !== mine) {
         let neighbourCoordinates = findNeighbourFields(map, rowI, colI);
+        let mineCount = countMines(map, neighbourCoordinates);
+        map[rowI][colI] = mineCount;
       }
     }
   }
+}
+
+function countMines(map, coordinates) {
+  let mineCount = 0;
+  for (let i = 0; i < coordinates.length; i++) {
+    let coordinate = coordinates[i];
+    let field = map[coordinate.row][coordinate.col];
+    if (field === mine) {
+      mineCount++;
+    }
+  }
+  return mineCount;
 }
 
 function findNeighbourFields(map, rowI, colI) {
@@ -41,13 +55,14 @@ function findNeighbourFields(map, rowI, colI) {
     for (let col = colI - 1; col <= colI + 1; col++) {
       if (row >= 0 && row < rows && col >= 0 && col < columns) {
         if (row !== rowI || col !== colI) {
-          neighbourCoordinates.push({ row: row, col: col });
+          neighbourCoordinates.push({row: row, col: col});
         }
       }
     }
   }
   return neighbourCoordinates;
 }
+
 
 function placeMines(map, mineCount) {
   let mines = 0;
