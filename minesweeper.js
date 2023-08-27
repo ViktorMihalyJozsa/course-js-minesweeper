@@ -22,12 +22,18 @@ const images = {
 
 let map = createMap();
 let exploredMap = createExproledMap();
-exploredMap[0][0] = true;
-exploredMap[2][3] = true;
-exploredMap[2][4] = true;
 placeMines(map, mineCount);
 calculateFiledValues(map);
 whenAllImagesLoaded(drawMap);
+
+canvas.addEventListener('click', function(event) {
+  const x = event.offsetX;
+  const y = event.offsetY;
+  const col = Math.floor(x / size);
+  const row = Math.floor(y / size);
+  exploredMap[row][col] = true;
+  drawMap();
+});
 
 function calculateFiledValues(map) {
   for (let rowI = 0; rowI < rows; rowI++) {
