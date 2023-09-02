@@ -53,7 +53,7 @@ canvas.addEventListener('click', function(event) {
     startTimer();
   }
   exploreField(row, col);
-  whenAllImagesLoaded(drawMap);
+  drawMap();
   checkGameEnd(row, col);
 });
 
@@ -68,16 +68,16 @@ canvas.addEventListener('contextmenu', function(event) {
     let flaggedNeighbours = countFlaggedNeighbours(neighbourCoordinates);
     if (flaggedNeighbours === map[row][col]) {
       for (let i = 0; i < neighbourCoordinates.length; i++) {
-        let coordinate = neighbourCoordinates[i];
-        exploreField(coordinate.row, coordinate.col);
+        let coordinate = neighbourCoordinates[i]; // {row: 7, col: 1
+        exploreField(coordinate.row, coordinate.col); // rekurzió
       }
     }
   } else {
     flagMap[row][col] = !flagMap[row][col];
-    remainingMines += flagMap[row][col] ? -1 : 1;
+    remainingMines += flagMap[row][col] ? -1 : 1; // ternary operator
     mineCounter.innerText = convertNumberTo3DigitString(remainingMines);
   }
-  whenAllImagesLoaded(drawMap);
+  drawMap();
   if (isGameOver) {
     showWrongFlags();
   }
@@ -149,8 +149,8 @@ function exploreField(row, col) {
     if (map[row][col] === 0) {
       let neighbourCoordinates = findNeighbourFields(map, row, col);
       for (let i = 0; i < neighbourCoordinates.length; i++) {
-        let coordinate = neighbourCoordinates[i];
-        exploreField(coordinate.row, coordinate.col);
+        let coordinate = neighbourCoordinates[i]; // {row: 7, col: 1}
+        exploreField(coordinate.row, coordinate.col); // rekurzió
       }
     }
   }
@@ -161,7 +161,7 @@ function calculateFieldValues(map) {
     for (let colI = 0; colI < columns; colI++) {
       let field = map[rowI][colI];
       if (field !== mine) {
-        let neighbourCoordinates = findNeighbourFields(map, rowI, colI);
+        let neighbourCoordinates = findNeighbourFields(map, rowI, colI); // [{row: 7, col: 1}, {row: 7, col: 2}, ...]
         let mineCount = countMines(map, neighbourCoordinates);
         map[rowI][colI] = mineCount;
       }
@@ -172,7 +172,7 @@ function calculateFieldValues(map) {
 function countMines(map, coordinates) {
   let mineCount = 0;
   for (let i = 0; i < coordinates.length; i++) {
-    let coordinate = coordinates[i];
+    let coordinate = coordinates[i]; // {row: 7, col: 1}
     let field = map[coordinate.row][coordinate.col];
     if (field === mine) {
       mineCount++;
@@ -184,7 +184,7 @@ function countMines(map, coordinates) {
 function countFlaggedNeighbours(coordinates) {
   let flaggedNeighbours = 0;
   for (let i = 0; i < coordinates.length; i++) {
-    let coordinate = coordinates[i];
+    let coordinate = coordinates[i]; // {row: 7, col: 1}
     if (flagMap[coordinate.row][coordinate.col]) {
       flaggedNeighbours++;
     }
@@ -243,7 +243,7 @@ function createBooleanMap() {
   return exploredMap;
 }
 
-function whenAllImagesLoaded(drawMap) {
+function drawMap() {
   for (let rowI = 0; rowI < rows; rowI++) {
     for (let colI = 0; colI < columns; colI++) {
       if (!exploredMap[rowI][colI]) {
@@ -276,25 +276,26 @@ function convertNumberTo3DigitString(number) {
   }
 }
 
-
+// Ez a függvény megvárja, amíg az összes kép betöltődik, és csak utána hívja meg a paraméterként kapott másik függvényt.
+// Az első paraméter a meghívandó függvény, a második paraméter a betöltési idő, ami 0-ról indul.
 function whenAllImagesLoaded(onAllImagesLoaded, loadTime = 0) {
-  const imageCount = Object.values(images).length; 
-  let loadedImages = 0; 
-  for (let image of Object.values(images)) { 
-    if (image.complete) { 
-      loadedImages++;
+  const imageCount = Object.values(images).length; // az összes kép száma
+  let loadedImages = 0; // azoknak a képeknek a száma, amik már betöltődtek
+  for (let image of Object.values(images)) { // végigmegyünk az összes képen
+    if (image.complete) { // ha a kép betöltődött
+      loadedImages++; // növeljük a betöltött képek számát
     }
   }
-
+  // ha még nem töltődött be minden kép, és még nem telt el 3 másodperc
   if (loadedImages < imageCount && loadTime < 3000) { 
-    console.log('Waiting for images to load');
-    setTimeout(() => {
-      whenAllImagesLoaded(onAllImagesLoaded, loadTime + 100);
+    console.log('Waiting for images to load'); // kiírjuk, hogy várunk a képekre
+    setTimeout(() => { // 100ms múlva újra meghívjuk ezt a függvényt
+      whenAllImagesLoaded(onAllImagesLoaded, loadTime + 100); // a betöltési időt 100ms-al növeljük
     }, 100);
   }
-  if (loadTime >= 3000) {
-    console.log('Images could not be loaded');
-  } else if (imageCount === loadedImages) {
-    onAllImagesLoaded();
+  if (loadTime >= 3000) { // ha már eltelt 3 másodperc
+    console.log('Images could not be loaded'); // kiírjuk, hogy nem sikerült betölteni a képeket
+  } else if (imageCount === loadedImages) { // különben ha minden kép betöltődött
+    onAllImagesLoaded(); // meghívjuk a paraméterként kapott függvényt
   }
 }
